@@ -1,0 +1,117 @@
+##===============================================================================
+## Título: Leitura e gravação de dados no R
+## Curso : CET076
+## Autor : José Cláudio Faria/UESC/DCET
+## Data  : 2014/09/03 - 08:23:16
+## Versão: v5
+## Objetivos:
+##===============================================================================
+## a) Apresentar os recursos básicos para leitura e gravação de dados
+##===============================================================================
+
+## Dados na WEB
+w_bm <- 'http://nbcgib.uesc.br/lec/download/R/dados/bussab_morettin.txt'
+w_ms <- 'http://nbcgib.uesc.br/lec/download/R/dados/msfinal.csv'  
+w_se <- 'http://nbcgib.uesc.br/lec/download/R/dados/semente.csv'
+w_tg <- 'http://nbcgib.uesc.br/lec/download/R/dados/tg.csv'
+
+## Local no computador
+l_bm <- './dados/bussab_morettin.txt'
+l_ms <- './dados/msfinal.csv'
+l_pe <- './dados/peridon.txt'
+l_se <- './dados/semente.csv'
+l_tg <- './dados/tg.csv'
+
+##===================================
+## Leitura de dados remotos
+##===================================
+read.table(w_bm,
+           head=T,
+           dec=',')        # observar que não foi definido o caracter usado para dado não diponível
+
+read.table(w_bm,
+           head=T,
+           dec=',',
+           na.strings='.') # agora está OK
+
+read.table(w_ms,
+           dec=',',
+           sep=';')        # observar que faltou informar que a primeira linha do arquivo é o nome das variáveis
+
+read.table(w_ms,
+           head=T,
+           dec=',',
+           sep=';')        # agora está OK
+
+read.table(w_se,
+           head=T,
+           dec=',',
+           sep=';')        # um arquivo um pouco maior
+
+read.table(w_tg,
+           head=T,
+           dec=',')        # exemplo com um número maior de variáveis
+
+## Observar que embora o R leia os dados remotamente, como a leitura não foi atribuída a nenhum objeto,
+## Não é possível fazer nada com os dados.
+## Para armazenar o objeto no espaço de trabalho (Workspace) para análises subsequente:
+
+bm <- read.table(l_bm,
+                 head=T,
+                 dec=',',
+                 na.strings='.') # agora está OK
+
+ls()
+str(bm)
+summary(bm)
+plot(bm)
+
+
+##===================================
+## Leitura e gravação de dados local
+##===================================
+## É necessário ajustar a localização dos arquivos para o computador do usuário
+## Os arquivos texto estão disponíveis no LEC
+
+read.table(l_bm,
+           head=T,
+           dec=',')
+
+read.table(l_pe) 
+
+read.table(l_pe,
+           h=T)
+
+dad <- read.table(l_pe,
+                  h=T)
+dad
+
+## Gravação de dados
+setwd('./tmp')
+
+write.table(iris,
+            'iris.txt') 
+
+dad[1,1]=999
+
+write.table(dad,
+            'peridon_alt.txt') 
+
+
+##===================================
+## Salvar conteúdo de análises
+##===================================
+getwd()              # Verificando onde está o dir. de trabalho (workdir)
+dir()
+
+sink('analise.txt')  # O canal stdOUT é desviado para a conexão analise.txt 
+  summary(iris)
+
+  library(fdth)
+
+  tb <- fdt(iris)
+
+  summary(tb)
+sink()               # O canal stdOUT retorna para o console do R
+
+summary(iris)
